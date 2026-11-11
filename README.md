@@ -309,7 +309,7 @@ dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
 The initial dnsrecon execution encountered an error. The tool was upgraded to version 1.6.3, after which the enumeration completed successfully.
 
 **Evidence:**
-
+(6_dnsrecon_fixed.png)
 
 
 ---
