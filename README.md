@@ -370,7 +370,7 @@ MAC addresses have been partially masked for privacy.
 
 ### 5.3 Host Analysis
 
-**192.168.1.1 – Gateway Router**
+**192.168.1.6 – Huawei Device**
 
 - TCP port 53 is commonly associated with DNS.
 - TCP port 80 is commonly associated with HTTP.
