@@ -369,23 +369,47 @@ MAC addresses have been partially masked for privacy.
 
 
 ### 5.3 Host Analysis
-192.168.1.1 – Gateway Router
 
+The Nmap scan identified four devices with open TCP ports within the scanned port range. The following analysis is based on the recorded scan results. Device roles and service descriptions are preliminary and require further verification.
+
+**192.168.1.1 – Gateway Router**
+
+- TCP ports 53, 80, 139 and 445 were identified as open.
+- Port 53 is commonly associated with DNS.
+- Port 80 is commonly associated with HTTP.
+- Port 139 is commonly associated with NetBIOS Session Service.
+- Port 445 is commonly associated with Microsoft-DS/SMB.
+- The SMB-associated ports should be investigated to determine why file-sharing services are accessible on the gateway device.
 
 **192.168.1.6 – Huawei Device**
 
 - TCP ports 53, 80 and 443 were identified as open.
+- Port 53 is commonly associated with DNS.
+- Port 80 is commonly associated with HTTP.
+- Port 443 is commonly associated with HTTPS.
 - Nmap classified 97 scanned ports as filtered.
-- Filtered ports indicate that Nmap could not determine whether the ports were open or closed, possibly because of firewall filtering.
-- Further investigation is required to identify the services running on these ports.
+- The device may be a router, modem or wireless access point, based on the recorded vendor information. Its exact role has not been confirmed.
 
 **192.168.1.9 – Arcadyan Device**
 
-- Ports 3000, 8008, 8009 and 8443 were identified as open.
-- These ports may be associated with media streaming or device-management services.
-- The actual applications running on these ports were not confirmed.
-- Further service detection is recommended.
-- 
+- TCP ports 3000, 8008, 8009 and 8443 were identified as open.
+- These ports are associated with different application and web-service conventions.
+- The exact applications running on these ports were not confirmed by the Fast Scan.
+- Further service and version detection is recommended to identify the services and determine whether they are required.
+
+**192.168.1.12 – Possible Windows Scanning Machine**
+
+- TCP ports 135, 139 and 445 were identified as open.
+- Port 135 is commonly associated with Microsoft RPC.
+- Ports 139 and 445 are commonly associated with NetBIOS and SMB.
+- The device may be a Windows computer, but its operating system and exact role were not confirmed.
+- Further investigation should establish whether these services are necessary and appropriately restricted.
+
+**Other Discovered Hosts**
+
+- 192.168.1.2, 192.168.1.3 and 192.168.1.8 responded to host discovery.
+- No open ports were identified on these devices within the 100 TCP ports scanned.
+- This does not mean that the devices have no services running on other ports or protocols.
 ### 5.4 Network Topology Analysis
 
 Zenmap was used to visualise the discovered network devices and their scan results.
