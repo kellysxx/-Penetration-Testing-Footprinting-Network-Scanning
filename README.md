@@ -499,11 +499,9 @@ A follow-up assessment should validate the identified services and their version
 
 12. **Investigate port 3000:** Identify the application running on 192.168.1.9 and determine whether it is required.
 
-13. **Protect Windows file sharing:** Apply appropriate Windows Firewall rules and restrict file-sharing access to trusted devices.
+13. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
 
-14. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
-
-15. **Perform further service enumeration:** Use authorised service and version detection to identify the applications behind the discovered ports.
+14. **Perform further service enumeration:** Use authorised service and version detection to identify the applications behind the discovered ports.
 
 ---
 
