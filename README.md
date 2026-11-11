@@ -453,10 +453,10 @@ A follow-up assessment should validate the identified services and their version
 | F-07 | Website and mail hostnames resolve to the same IP                        | nslookup / dnsrecon | Informational               |
 | F-08 | Public contact email identified                                          | WhatWeb             | Informational               |
 | F-09 | Different name server entries appeared in registrar and registry records | WHOIS               | Requires verification       |
-| F-10 | TCP ports 139 and 445 open on gateway router                             | Nmap                | Requires service validation |
+| F-10 | TCP ports 53, 80, 139 and 445 open on confirmed gateway device                            | Nmap                | Requires service validation |
 | F-11 | HTTP services detected on 192.168.1.1 and 192.168.1.6                    | Nmap                | Requires validation         |
-| F-12 | Multiple ports open on Arcadyan device, including unidentified port 3000 | Nmap                | Requires validation         |
-| F-13 | Windows RPC and SMB-associated ports open on 192.168.1.12                | Nmap                | Requires validation         |
+| F-12 | Multiple open TCP ports (3000, 8008, 8009 and 8443) on Arcadyan-associated device; services unconfirmed | Nmap                | Requires validation         |
+| F-13 | TCP ports 135, 139 and 445 open on confirmed Windows scanning computer (`192.168.1.12`)                | Nmap                | Requires validation         |
 | F-14 | Seven responsive devices identified within the scanned subnet            | Nmap                | Informational               |
 
 ### Positive Security Observations
