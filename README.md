@@ -134,7 +134,7 @@ whois networkwalks.com | tee 1_whois.txt
 - Additional name server entries appeared in the registrar record and should be checked against the authoritative delegation.
 
 **Evidence:**
-
+<img width="1920" height="892" alt="1_whois" src="https://github.com/user-attachments/assets/e73fe399-a66f-4c99-9ed4-ebcdf9e09798" />
 
 
 ### 4.2 Web Technology Fingerprinting (WhatWeb)
@@ -168,6 +168,7 @@ whatweb networkwalks.com | tee 2_whatweb.txt
 - The collected headers included caching-related information.
 
 **Evidence:**
+<img width="1920" height="891" alt="2_whatweb" src="https://github.com/user-attachments/assets/14ff1174-de48-4744-b2a5-4db9df3b150a" />
 
 
 
@@ -195,6 +196,7 @@ The DNS lookup successfully resolved the domain to an IPv4 address.
 The collected result returned one A record. This does not establish whether additional load balancing, CDN services or origin-protection mechanisms are present.
 
 **Evidence:**
+<img width="1920" height="891" alt="3_nslookup" src="https://github.com/user-attachments/assets/dc4a9d13-ab0d-4d21-a762-a18c217e9918" />
 
 
 
@@ -240,6 +242,8 @@ The WordPress REST API endpoint was advertised through the Link header. Its pres
 - The Apache version was not disclosed in the captured response.
 
 **Evidence:**
+<img width="1920" height="891" alt="4_headers" src="https://github.com/user-attachments/assets/c03f5f36-1a08-4a62-b95e-7f2bff76618b" />
+
 
 
 
@@ -265,6 +269,7 @@ The tool identified ModSecurity as the Web Application Firewall protecting the w
 A WAF provides an additional security layer by inspecting and filtering web traffic. Its detection does not guarantee that the website is protected against every attack.
 
 **Evidence:**
+<img width="1920" height="891" alt="5_waf" src="https://github.com/user-attachments/assets/25c01c6c-cce3-4bb4-9054-c93869e78fcc" />
 
 
 
