@@ -369,15 +369,8 @@ MAC addresses have been partially masked for privacy.
 
 
 ### 5.3 Host Analysis
-### 5.3 Host Analysis
+192.168.1.1 – Gateway Router
 
-**192.168.1.1 – Gateway Router**
-
-- TCP port 53 is commonly associated with DNS.
-- TCP port 80 is commonly associated with HTTP.
-- TCP ports 139 and 445 are commonly associated with NetBIOS and SMB.
-- The HTTP service may provide a router management interface, but this was not confirmed.
-- The SMB-related services should be investigated to establish whether file sharing is enabled and which SMB version is running.
 
 **192.168.1.6 – Huawei Device**
 
@@ -392,7 +385,7 @@ MAC addresses have been partially masked for privacy.
 - These ports may be associated with media streaming or device-management services.
 - The actual applications running on these ports were not confirmed.
 - Further service detection is recommended.
-
+- 
 ### 5.4 Network Topology Analysis
 
 Zenmap was used to visualise the discovered network devices and their scan results.
