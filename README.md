@@ -467,7 +467,7 @@ A follow-up assessment should validate the identified services and their version
 - ModSecurity WAF was detected.
 - Domain protection statuses were enabled.
 - The Apache version was not disclosed in the captured response.
-- Three discovered client devices had no open ports within the scanned TCP port range.
+- Three discovered client devices (`192.168.1.2`, `192.168.1.3` and `192.168.1.8`) had no open ports within the 100 common TCP ports scanned.
 
 ---
 
@@ -479,7 +479,7 @@ A follow-up assessment should validate the identified services and their version
 
 2. **Improve HTTP security headers:** Review the configuration of HSTS, Content-Security-Policy, X-Frame-Options or CSP frame-ancestors, and X-Content-Type-Options.
 
-3. **Review cookie security:** Consider setting an appropriate SameSite attribute on cookies.
+3. **Review cookie security:** Verify that cookies use appropriate Secure, HttpOnly and SameSite attributes. The captured response showed Secure and HttpOnly attributes; the SameSite configuration should be confirmed.
 
 4. **Strengthen email authentication:** Review SPF configuration, confirm all legitimate sending services before changing the policy to `-all`, and configure DKIM and DMARC.
 
@@ -493,17 +493,17 @@ A follow-up assessment should validate the identified services and their version
 
 ### 7.2 Internal Network Security Recommendations
 
-9. **Review SMB services:** Identify why ports 139 and 445 are open on the gateway. Disable unnecessary file-sharing services and avoid SMBv1.
+9. **Review SMB services:** Investigate why ports 139 and 445 are open on the gateway. Identify the services using these ports, disable unnecessary file-sharing services and verify that SMBv1 is not enabled.
+10. **Review gateway security:** Verify that gateway administration is restricted to trusted devices, use strong administrator credentials, keep firmware updated and use HTTPS for management where supported.
+11. **Secure router management:** Use strong administrator passwords, update firmware and use HTTPS for management where supported.
 
-10. **Secure router management:** Use strong administrator passwords, update firmware and use HTTPS for management where supported.
+12. **Investigate port 3000:** Identify the application running on 192.168.1.9 and determine whether it is required.
 
-11. **Investigate port 3000:** Identify the application running on 192.168.1.9 and determine whether it is required.
+13. **Protect Windows file sharing:** Apply appropriate Windows Firewall rules and restrict file-sharing access to trusted devices.
 
-12. **Protect Windows file sharing:** Apply appropriate Windows Firewall rules and restrict file-sharing access to trusted devices.
+14. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
 
-13. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
-
-14. **Perform further service enumeration:** Use authorised service and version detection to identify the applications behind the discovered ports.
+15. **Perform further service enumeration:** Use authorised service and version detection to identify the applications behind the discovered ports.
 
 ---
 
