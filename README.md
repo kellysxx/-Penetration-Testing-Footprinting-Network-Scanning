@@ -53,10 +53,11 @@ No exploitation or destructive testing was performed.
 **Network Scanning:**
 
 - Seven active hosts were identified on the `192.168.1.0/24` subnet.
-- Four hosts had open TCP ports within the scanned port range.
-- Ports commonly associated with SMB were detected on the gateway device.
-- HTTP services were detected on two network devices.
-- Additional services were identified on a device with an Arcadyan MAC vendor association.
+- Four hosts returned open TCP ports within the 100 common TCP ports scanned by Nmap.
+- The gateway device (`192.168.1.1`) was confirmed as the default gateway using the Windows network configuration.
+- The Windows scanning computer was identified as `192.168.1.12`, with TCP ports 135, 139 and 445 reported as open.
+- The Huawei-associated device (`192.168.1.6`) returned open ports 53, 80 and 443.
+- The Arcadyan-associated device (`192.168.1.9`) returned open ports 3000, 8008, 8009 and 8443. The exact services were not confirmed.
 
 ### Overall Assessment
 
