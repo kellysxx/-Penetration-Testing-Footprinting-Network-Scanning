@@ -291,7 +291,7 @@ dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
 | MX        | mail.networkwalks.com                 | 192.232.216.135                                    |
 | A         | networkwalks.com                      | 192.232.216.135                                    |
 | TXT       | networkwalks.com                      | Google site verification                           |
-| TXT (SPF) | networkwalks.com                      | v=spf1 +a +mx +ip4:50.87.144.87 +include.com \~all |
+| TXT (SPF) | networkwalks.com | `v=spf1 +a +mx +ip4:50.87.144.87 +include:websitewelcome.com ~all` |
 | SRV       | \_autodiscover.\_tcp.networkwalks.com | cpanelemaildiscovery.cpanel.net:443                |
 | DNSSEC    | —                                     | Reported as unsigned / no answer                   |
 
