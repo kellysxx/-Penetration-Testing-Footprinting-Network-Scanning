@@ -342,6 +342,7 @@ The scan identified seven responsive hosts.
 
 **Evidence:**
 
+<img width="951" height="517" alt="Screenshot 2026-11-09 131600" src="https://github.com/user-attachments/assets/ace6779b-5abc-4759-8d3a-31cafbb616d6" />
 
 
 ### 5.2 Host and Port Discovery Results
@@ -361,6 +362,7 @@ MAC addresses have been partially masked for privacy.
 **Important:** Port numbers and Nmap service labels provide initial clues, not definitive identification of the software running on a device.
 
 **Evidence:**
+<img width="951" height="517" alt="Screenshot 2026-11-09 131715" src="https://github.com/user-attachments/assets/0bd8bff0-4c07-4e06-86c5-bf51dc8b04c7" />
 
 
 
@@ -410,7 +412,7 @@ However, a topology diagram alone does not prove that every device can communica
 
 **Evidence:**
 
-
+.pdf
 
 ### 5.5 Scan Limitations
 
