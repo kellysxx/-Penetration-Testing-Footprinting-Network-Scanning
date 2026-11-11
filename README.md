@@ -1,76 +1,102 @@
-# -Penetration-Testing-Footprinting-Network-Scanning
-
-
 # Penetration Testing Report: Footprinting & Network Scanning
 
-> **Disclaimer:** This work was done for an authorised training lab as part of the Networkwalks cybersecurity course. It is for educational purposes only. No exploitation was attempted. Do not scan systems or networks without permission.
+> **Disclaimer:** This assessment was conducted as part of an authorised cybersecurity training lab with Networkwalks Academy. It is for educational purposes only. No exploitation was performed. Never scan systems or networks without appropriate permission.
 
-| | |
-|---|---|
-| **Prepared by** | Kelechi Happiness Uzoma |
-| **Batch** | B084C |
-| **Instructor** | Waqas Karim |
-| **Target (footprinting)** | networkwalks.com |
-| **Target (network scanning)** | 192.168.1.0/24 (local network) |
-| **Testing dates** | 8–9 November 2026 |
-| **Testing platforms** | Kali Linux (footprinting); Windows with Zenmap / Nmap 7.98 (scanning) |
-| **Report version** | 1.0 |
+| Project Information         | Details                                                                 |
+| --------------------------- | ----------------------------------------------------------------------- |
+| **Prepared by**             | Kelechi Happiness Uzoma                                                 |
+| **Batch**                   | B084C                                                                   |
+| **Instructor**              | Waqas Karim                                                             |
+| **Footprinting Target**     | networkwalks.com                                                        |
+| **Network Scanning Target** | 192.168.1.0/24 (local network)                                          |
+| **Testing Dates**           | 8–9 November 2026                                                       |
+| **Platforms**               | Kali Linux and Windows                                                  |
+| **Tools**                   | WHOIS, WhatWeb, nslookup, curl, wafw00f, dnsrecon, Zenmap and Nmap 7.98 |
+| **Report Version**          | 1.1                                                                     |
 
-## Contents
+---
 
-1. [Executive Summary](#1-executive-summary)
-2. [Scope and Authorisation](#2-scope-and-authorisation)
-3. [Methodology and Tools](#3-methodology-and-tools)
-4. [Phase 1 – Footprinting Results](#4-phase-1--footprinting-results)
-5. [Phase 2 – Network Scanning Results](#5-phase-2--network-scanning-results)
-6. [Summary of Findings](#6-summary-of-findings)
-7. [Recommendations](#7-recommendations)
-8. [Conclusion](#8-conclusion)
+## Table of Contents
+
+1. Executive Summary
+2. Scope and Authorisation
+3. Methodology and Tools
+4. Phase 1 – Footprinting Results
+5. Phase 2 – Network Scanning Results
+6. Summary of Findings
+7. Recommendations
+8. Limitations
+9. Conclusion
 
 ---
 
 ## 1. Executive Summary
 
-This report covers the first two phases of a penetration test: footprinting of the domain networkwalks.com, and network scanning of the local network 192.168.1.0/24. No exploitation was attempted.
+This project documents two initial phases of a penetration-testing assessment: footprinting of `networkwalks.com` and network scanning of the local subnet `192.168.1.0/24`.
 
-Key results:
+The assessment focused on collecting publicly available information, identifying technologies, examining DNS records, reviewing HTTP response headers, detecting a Web Application Firewall (WAF), discovering active network hosts and identifying open ports.
 
-- The domain resolves to one IP address, **192.232.216.135**, on HostGator shared cPanel hosting. The same address serves web and mail.
-- The website runs **WordPress 7.1.4** on **Apache** with the **WordPress Download Manager 3.3.76** plugin. Both versions are publicly disclosed.
-- The site is protected by a **ModSecurity (SpiderLabs) WAF** and enforces HTTPS by redirect.
-- The name servers disclose their **BIND version (9.16.23-RH)**. **DNSSEC is not enabled**, and the **SPF policy ends in a soft fail (~all)**.
-- Several recommended **HTTP security headers were not present** in the server response.
-- The network scan found **7 hosts up**: the scanning machine and six other devices. Four hosts have open ports.
-- The gateway router (192.168.1.1) exposes **SMB file sharing (ports 139 and 445)** and an **unencrypted HTTP admin page** to the whole LAN.
+No exploitation or destructive testing was performed.
 
-**Overall risk rating: Low for the public website; Low to Medium for the internal network**, pending service version checks. No directly exploitable weakness was confirmed. The findings are information disclosure, hardening gaps and unnecessary exposed services.
+### Key Findings
+
+**Footprinting:**
+
+- The domain resolved to IPv4 address `192.232.216.135`.
+- The website was identified as using WordPress and Apache.
+- WordPress and WordPress Download Manager version information was disclosed in the collected results.
+- A ModSecurity (SpiderLabs) Web Application Firewall was detected.
+- The HTTP service redirected requests to HTTPS.
+- Several recommended HTTP security headers were not present in the captured response.
+- DNS records disclosed name server information and an SPF policy ending in `~all`.
+
+**Network Scanning:**
+
+- Seven active hosts were identified on the `192.168.1.0/24` subnet.
+- Four hosts had open TCP ports within the scanned port range.
+- Ports commonly associated with SMB were detected on the gateway device.
+- HTTP services were detected on two network devices.
+- Additional services were identified on a device with an Arcadyan MAC vendor association.
+
+### Overall Assessment
+
+The assessment identified information-disclosure issues, configuration-hardening opportunities and network services requiring further investigation.
+
+No directly exploitable vulnerability was confirmed during this assessment. Risk ratings should therefore be treated as preliminary until the affected services and configurations are validated.
 
 ---
 
 ## 2. Scope and Authorisation
 
-| Item | Detail |
-|---|---|
-| In scope | Public information about networkwalks.com; host discovery and port scanning of 192.168.1.0/24 |
-| Out of scope | Exploitation, brute forcing, denial of service, social engineering |
-| Authorisation | Performed as part of the Networkwalks cybersecurity course lab |
-| Scanner IP | 192.168.1.12 (inferred from the scan) |
+| Item                    | Details                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------- |
+| In-scope domain         | networkwalks.com                                                              |
+| In-scope network        | 192.168.1.0/24                                                                |
+| Assessment activities   | Footprinting, DNS enumeration, host discovery and TCP port scanning           |
+| Out-of-scope activities | Exploitation, brute forcing, denial-of-service testing and social engineering |
+| Authorisation           | Conducted within the Networkwalks cybersecurity training lab                  |
+| Scanner IP              | 192.168.1.12 (inferred from scan results; confirmation recommended)           |
+
+The assessment was limited to information gathering and scanning activities.
 
 ---
 
 ## 3. Methodology and Tools
 
-| Phase | Tool | Purpose | Output file |
-|---|---|---|---|
-| Footprinting | whois | Domain registration details | 1_whois.txt |
-| Footprinting | WhatWeb | Web technology fingerprinting | 2_whatweb.txt |
-| Footprinting | nslookup | DNS resolution | 3_nslookup.txt |
-| Footprinting | curl -I | HTTP response header analysis | 4_headers.txt |
-| Footprinting | wafw00f v2.3.1 | WAF detection | 5_waf.txt |
-| Footprinting | dnsrecon 1.6.3 | DNS record enumeration | 6_dnsrecon_fixed.txt |
-| Scanning | Zenmap (Nmap 7.98) | Host discovery, port scan, topology | Zenmap screenshots |
+The project followed a structured information-gathering and network-discovery methodology.
 
-Footprinting output was saved to `~/week2-pm1` using `tee`.
+| Phase            | Tool      | Purpose                                               |
+| ---------------- | --------- | ----------------------------------------------------- |
+| Footprinting     | WHOIS     | Domain registration information                       |
+| Footprinting     | WhatWeb   | Website technology identification                     |
+| Footprinting     | nslookup  | DNS resolution                                        |
+| Footprinting     | curl      | HTTP response header inspection                       |
+| Footprinting     | wafw00f   | Web Application Firewall detection                    |
+| Footprinting     | dnsrecon  | DNS record enumeration                                |
+| Network Scanning | Zenmap    | Graphical network scanning and topology visualisation |
+| Network Scanning | Nmap 7.98 | Host discovery and TCP port scanning                  |
+
+Footprinting output was saved in the `~/week2-pm1` directory using the `tee` command.
 
 ---
 
@@ -78,134 +104,208 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 
 ### 4.1 WHOIS Lookup
 
-**Command:** `whois networkwalks.com | tee 1_whois.txt`
+**Command:**
 
-| Field | Value |
-|---|---|
-| Domain name | NETWORKWALKS.COM |
-| Registry Domain ID | 2452319255_DOMAIN_COM-VRSN |
-| Registrar | GoDaddy.com, LLC (IANA ID 146) |
-| Creation date | 2019-11-06 |
-| Updated date | 2025-11-12 |
-| Expiry date | 2027-11-06 |
-| Domain status | clientDeleteProhibited, clientRenewProhibited, clientTransferProhibited, clientUpdateProhibited |
-| Name servers (registry) | NS6135.HOSTGATOR.COM, NS6136.HOSTGATOR.COM |
-| Name servers (registrar record) | The two above, plus NS29.DOMAINCONTROL.COM and NS30.DOMAINCONTROL.COM |
-| DNSSEC | Unsigned |
+```bash
+whois networkwalks.com | tee 1_whois.txt
+```
+
+**Results:**
+
+| Field                 | Value                                                                                           |
+| --------------------- | ----------------------------------------------------------------------------------------------- |
+| Domain                | NETWORKWALKS.COM                                                                                |
+| Registry Domain ID    | 2452319255_DOMAIN_COM-VRSN                                                                      |
+| Registrar             | GoDaddy.com, LLC                                                                                |
+| IANA ID               | 146                                                                                             |
+| Creation Date         | 2019-11-06                                                                                      |
+| Updated Date          | 2025-11-12                                                                                      |
+| Expiry Date           | 2027-11-06                                                                                      |
+| Domain Status         | clientDeleteProhibited, clientRenewProhibited, clientTransferProhibited, clientUpdateProhibited |
+| Registry Name Servers | NS6135.HOSTGATOR.COM, NS6136.HOSTGATOR.COM                                                      |
+| DNSSEC                | Unsigned                                                                                        |
 
 **Analysis:**
 
-- The domain is registered with GoDaddy, but DNS is delegated to HostGator.
-- All four client lock statuses are set, which protects against unauthorised transfer or deletion.
-- Registrant contact details are hidden behind GoDaddy's contact form, which limits material for social engineering.
-- The registrar record lists two extra GoDaddy name servers that the registry does not. This looks like a stale entry.
+- The domain is registered through GoDaddy.
+- The registry records list HostGator name servers.
+- Several domain protection statuses are enabled.
+- Registrant contact information is privacy-protected.
+- Additional name server entries appeared in the registrar record and should be checked against the authoritative delegation.
 
-![WHOIS output](1_whois.png)
+**Evidence:**
+
+
 
 ### 4.2 Web Technology Fingerprinting (WhatWeb)
 
-**Command:** `whatweb networkwalks.com | tee 2_whatweb.txt`
+**Command:**
 
-| Item | Result |
-|---|---|
-| HTTP response | 301 Moved Permanently to https://networkwalks.com/ |
-| HTTPS response | 200 OK |
-| IP address / country | 192.232.216.135 / United States |
-| Web server | Apache (version not disclosed) |
-| CMS | WordPress 7.1.4 (from the meta generator tag) |
-| Plugin | WordPress Download Manager 3.3.76 |
-| JavaScript library | jQuery 3.7.1 |
-| Page title | Networkwalks Academy |
-| Email found | info@networkwalks.com |
-| Cookie | __wpdm_client (HttpOnly) |
-| Uncommon headers | permissions-policy, link, upgrade, referrer-policy, x-endurance-cache-level, x-nginx-cache, x-redirect-by |
+```bash
+whatweb networkwalks.com | tee 2_whatweb.txt
+```
+
+**Results:**
+
+| Item               | Result                                                 |
+| ------------------ | ------------------------------------------------------ |
+| HTTP Response      | 301 Moved Permanently                                  |
+| HTTPS Response     | 200 OK                                                 |
+| IP Address         | 192.232.216.135                                        |
+| Web Server         | Apache                                                 |
+| CMS                | WordPress 7.1.4                                        |
+| Plugin             | WordPress Download Manager 3.3.76                      |
+| JavaScript Library | jQuery 3.7.1                                           |
+| Page Title         | Networkwalks Academy                                   |
+| Email Address      | [info@networkwalks.com](mailto\:info@networkwalks.com) |
 
 **Analysis:**
 
-- The exact WordPress and plugin versions are exposed, so an attacker can match them against public vulnerability databases.
-- WhatWeb also reported "Bootstrap 7.1.4". This is most likely a false positive taken from the WordPress version string, because the number is identical.
-- The `x-endurance-cache-level` and `x-nginx-cache` headers show a caching layer typical of HostGator-family hosting.
+- The website redirects HTTP traffic to HTTPS.
+- WordPress and plugin version information was disclosed.
+- Exposed version information can help an attacker identify software that may require security updates.
+- WhatWeb also reported Bootstrap 7.1.4. This identification may be a false positive and should be verified independently.
+- The collected headers included caching-related information.
 
-![WhatWeb output](2_whatweb.png)
+**Evidence:**
+
+
 
 ### 4.3 DNS Resolution (nslookup)
 
-**Command:** `nslookup networkwalks.com | tee 3_nslookup.txt`
+**Command:**
 
-| Field | Value |
-|---|---|
-| Resolver used | 8.8.8.8#53 (Google Public DNS) |
-| Answer type | Non-authoritative |
-| A record | networkwalks.com → 192.232.216.135 |
+```bash
+nslookup networkwalks.com | tee 3_nslookup.txt
+```
 
-**Analysis:** The domain resolves to a single IPv4 address with no load balancing or CDN in front of it. The origin server's real IP is therefore directly exposed.
+**Results:**
 
-![nslookup output](3_nslookup.png)
-
-### 4.4 HTTP Header Analysis (curl)
-
-**Command:** `curl -I https://networkwalks.com | tee 4_headers.txt`
-
-| Header | Value |
-|---|---|
-| Status | HTTP/2 200 |
-| server | Apache |
-| content-type | text/html; charset=UTF-8 |
-| set-cookie | __wpdm_client=[masked]; path=/; domain=networkwalks.com; secure; HttpOnly |
-| referrer-policy | no-referrer-when-downgrade |
-| permissions-policy | private-state-token-redemption / issuance rules present |
-| link | https://networkwalks.com/wp-json/ (WordPress REST API) |
-| x-nginx-cache | WordPress |
-| x-endurance-cache-level | 0 |
+| Field         | Value             |
+| ------------- | ----------------- |
+| DNS Resolver  | 8.8.8.8           |
+| Resolver Port | 53                |
+| Response Type | Non-authoritative |
+| A Record      | 192.232.216.135   |
 
 **Analysis:**
 
-- **Good:** HTTP/2 is supported, the cookie has the `Secure` and `HttpOnly` flags, and the Apache version is hidden.
-- **Missing from the response:** `Strict-Transport-Security`, `Content-Security-Policy`, `X-Frame-Options` and `X-Content-Type-Options`. The cookie also has no `SameSite` attribute.
-- The `link` header advertises the WordPress REST API (`/wp-json/`). This endpoint can sometimes be used to enumerate users. It was not tested in this phase.
+The DNS lookup successfully resolved the domain to an IPv4 address.
 
-![curl header output](4_headers.png)
+The collected result returned one A record. This does not establish whether additional load balancing, CDN services or origin-protection mechanisms are present.
 
-### 4.5 WAF Detection (wafw00f)
+**Evidence:**
 
-**Command:** `wafw00f networkwalks.com | tee 5_waf.txt`
 
-| Field | Value |
-|---|---|
-| Result | Site is behind **ModSecurity (SpiderLabs)** WAF |
-| Requests sent | 2 |
 
-**Analysis:** A WAF is active. This is a positive control. Later testing should expect filtering and blocking of malicious-looking requests.
+### 4.4 HTTP Security Header Analysis (curl)
 
-![wafw00f output](5_wafw00f.png)
+**Command:**
+
+```bash
+curl -I https://networkwalks.com | tee 4_headers.txt
+```
+
+**Results:**
+
+| Header                  | Observation                           |
+| ----------------------- | ------------------------------------- |
+| HTTP Status             | HTTP/2 200                            |
+| Server                  | Apache                                |
+| Content-Type            | text/html; charset=UTF-8              |
+| Set-Cookie              | \_\_wpdm_client (Secure and HttpOnly) |
+| Referrer-Policy         | no-referrer-when-downgrade            |
+| Permissions-Policy      | Present                               |
+| Link                    | WordPress REST API endpoint           |
+| X-Nginx-Cache           | WordPress                             |
+| X-Endurance-Cache-Level | 0                                     |
+
+**Security Observations:**
+
+The captured response did not include the following recommended security headers:
+
+- Strict-Transport-Security (HSTS)
+- Content-Security-Policy (CSP)
+- X-Frame-Options
+- X-Content-Type-Options
+
+The captured cookie also did not show a SameSite attribute.
+
+The WordPress REST API endpoint was advertised through the Link header. Its presence alone does not establish a vulnerability or confirm that sensitive information is exposed.
+
+**Positive Observations:**
+
+- HTTPS was successfully accessed.
+- The cookie included Secure and HttpOnly attributes.
+- The Apache version was not disclosed in the captured response.
+
+**Evidence:**
+
+
+
+### 4.5 Web Application Firewall Detection (wafw00f)
+
+**Command:**
+
+```bash
+wafw00f networkwalks.com | tee 5_waf.txt
+```
+
+**Results:**
+
+| Field         | Result                   |
+| ------------- | ------------------------ |
+| WAF Detection | ModSecurity (SpiderLabs) |
+| Requests Sent | 2                        |
+
+**Analysis:**
+
+The tool identified ModSecurity as the Web Application Firewall protecting the website.
+
+A WAF provides an additional security layer by inspecting and filtering web traffic. Its detection does not guarantee that the website is protected against every attack.
+
+**Evidence:**
+
+
 
 ### 4.6 DNS Enumeration (dnsrecon)
 
-**Command:** `dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt`
+**Command:**
 
-| Record | Name | Value |
-|---|---|---|
-| SOA | ns6135.hostgator.com | 50.87.144.87 |
-| NS | ns6135.hostgator.com | 50.87.144.87 (BIND 9.16.23-RH) |
-| NS | ns6136.hostgator.com | 192.232.216.131 (BIND 9.16.23-RH) |
-| MX | mail.networkwalks.com | 192.232.216.135 |
-| A | networkwalks.com | 192.232.216.135 |
-| TXT | networkwalks.com | google-site-verification=[masked] |
-| TXT (SPF) | networkwalks.com | v=spf1 +a +mx +ip4:50.87.144.87 +include:websitewelcome.com ~all |
-| SRV | _autodiscover._tcp.networkwalks.com | cpanelemaildiscovery.cpanel.net:443 |
-| DNSSEC | – | No answer (not configured) |
+```bash
+dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
+```
+
+**Results:**
+
+| Record    | Name                                  | Value                                              |
+| --------- | ------------------------------------- | -------------------------------------------------- |
+| SOA       | ns6135.hostgator.com                  | 50.87.144.87                                       |
+| NS        | ns6135.hostgator.com                  | 50.87.144.87                                       |
+| NS        | ns6136.hostgator.com                  | 192.232.216.131                                    |
+| MX        | mail.networkwalks.com                 | 192.232.216.135                                    |
+| A         | networkwalks.com                      | 192.232.216.135                                    |
+| TXT       | networkwalks.com                      | Google site verification                           |
+| TXT (SPF) | networkwalks.com                      | v=spf1 +a +mx +ip4:50.87.144.87 +include.com \~all |
+| SRV       | \_autodiscover.\_tcp.networkwalks.com | cpanelemaildiscovery.cpanel.net:443                |
+| DNSSEC    | —                                     | Reported as unsigned / no answer                   |
 
 **Analysis:**
 
-- Both name servers reveal their BIND version.
-- Web and mail share one IP address, so a compromise or outage of that server affects both services.
-- The SPF record ends in `~all` (soft fail), so spoofed mail is flagged rather than rejected.
-- No DMARC record appeared in the output. This was not checked directly.
-- The SRV records confirm the mail service is cPanel-based.
+- The DNS enumeration identified two name servers.
+- The collected results disclosed a BIND version of 9.16.23-RH.
+- The website and mail hostnames resolved to the same IP address in the collected results. This does not prove that they share the same physical server.
+- The SPF record ends with `~all`, which represents a soft-fail policy.
+- No DMARC record was shown in the collected output. A dedicated DMARC lookup is required to confirm its presence or absence.
+- DNSSEC was reported as unsigned in the collected WHOIS information. This should be verified with an authoritative DNSSEC check.
 
-**Tool note:** The first dnsrecon run failed. The tool was upgraded to 1.6.3 with python3-httpcore 1.0.9, and the scan then completed.
+**Tool Note:**
 
-![dnsrecon output](6_dnsrecon_fixed.png)
+The initial dnsrecon execution encountered an error. The tool was upgraded to version 1.6.3, after which the enumeration completed successfully.
+
+**Evidence:**
+
+
 
 ---
 
@@ -213,134 +313,222 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 
 ### 5.1 Scan Details
 
-| Item | Detail |
-|---|---|
-| Tool | Zenmap (Nmap 7.98) on Windows |
-| Profile | Quick scan |
-| Command | `nmap -T4 -F 192.168.1.0/24` |
-| Started | 2026-11-09 13:35 (+01:00) |
-| Result | 256 IP addresses scanned, **7 hosts up**, completed in 8.56 seconds |
+| Item               | Details                         |
+| ------------------ | ------------------------------- |
+| Tool               | Zenmap / Nmap 7.98              |
+| Platform           | Windows                         |
+| Scan Profile       | Quick Scan                      |
+| Command            | `nmap -T4 -F 192.168.1.0/24`    |
+| Start Time         | 9 November 2026, 13:35 (+01:00) |
+| Network Range      | 192.168.1.0/24                  |
+| Total IP Addresses | 256                             |
+| Active Hosts       | 7                               |
+| Completion Time    | 8.56 seconds                    |
 
-`-T4` sets aggressive timing. `-F` (fast mode) scans only the 100 most common TCP ports.
+**Command Explanation:**
 
-![Zenmap command](screenshots/07_zenmap_command.png)
+- `nmap` launches the network scanning tool.
+- `-T4` selects Nmap's faster timing template.
+- `-F` enables Fast Scan mode, reducing the default port list to 100 common ports per scanned protocol.
+- `192.168.1.0/24` specifies the target subnet.
 
-### 5.2 Host and Port Results
+The scan identified seven responsive hosts.
 
-MAC addresses are partly masked for privacy.
+**Evidence:**
 
-| Host | MAC address (vendor) | Other ports | Open ports (service) | Likely role |
-|---|---|---|---|---|
-| 192.168.1.1 | 8C:18:50:XX:XX:XX (China Mobile (Hangzhou) Information Technology) | 96 closed | 53 (domain), 80 (http), 139 (netbios-ssn), 445 (microsoft-ds) | Gateway router |
-| 192.168.1.2 | Randomised (vendor unknown) | 100 closed | None | Client device, probably a phone or tablet |
-| 192.168.1.3 | Randomised (vendor unknown) | 100 closed | None | Client device, probably a phone or tablet |
-| 192.168.1.6 | 48:4C:86:XX:XX:XX (Huawei Device) | 97 filtered | 53 (domain), 80 (http), 443 (https) | Huawei network device (router, modem or access point) |
-| 192.168.1.8 | Randomised (vendor unknown) | 100 closed | None | Client device, probably a phone or tablet |
-| 192.168.1.9 | DC:F5:1B:XX:XX:XX (Arcadyan) | 96 closed | 3000 (ppp), 8008 (http), 8009 (ajp13), 8443 (https-alt) | Probably a set-top box or smart TV device |
-| 192.168.1.12 | Not shown | 97 closed | 135 (msrpc), 139 (netbios-ssn), 445 (microsoft-ds) | Windows PC, almost certainly the scanning machine |
 
-![Nmap output, part 1](screenshots/08_nmap_output_1.png)
 
-![Nmap output, part 2](screenshots/09_nmap_output_2.png)
+### 5.2 Host and Port Discovery Results
+
+MAC addresses have been partially masked for privacy.
+
+| IP Address   | MAC / Vendor   | Open Ports             | Other Port Results | Possible Device Role              |
+| ------------ | -------------- | ---------------------- | ------------------ | --------------------------------- |
+| 192.168.1.1  | China Mobile   | 53, 80, 139, 445       | 96 closed          | Gateway router                    |
+| 192.168.1.2  | Randomised MAC | None                   | 100 closed         | Client device                     |
+| 192.168.1.3  | Randomised MAC | None                   | 100 closed         | Client device                     |
+| 192.168.1.6  | Huawei         | 53, 80, 443            | 97 filtered        | Router, modem or access point     |
+| 192.168.1.8  | Randomised MAC | None                   | 100 closed         | Client device                     |
+| 192.168.1.9  | Arcadyan       | 3000, 8008, 8009, 8443 | 96 closed          | Possible media or network device  |
+| 192.168.1.12 | Not shown      | 135, 139, 445          | 97 closed          | Possible Windows scanning machine |
+
+**Important:** Port numbers and Nmap service labels provide initial clues, not definitive identification of the software running on a device.
+
+**Evidence:**
+
+
+
+
 
 ### 5.3 Host Analysis
 
-**192.168.1.1 – gateway router**
+**192.168.1.1 – Gateway Router**
 
-- Port 53 shows it is the LAN's DNS forwarder, and port 80 is its web admin page.
-- The admin page uses plain HTTP, so the admin password can be sniffed by anyone on the LAN.
-- Ports 139 and 445 mean SMB file sharing is running on the router, probably a USB storage sharing feature. Router SMB services are often outdated, so this is the most important internal finding.
+- TCP port 53 is commonly associated with DNS.
+- TCP port 80 is commonly associated with HTTP.
+- TCP ports 139 and 445 are commonly associated with NetBIOS and SMB.
+- The HTTP service may provide a router management interface, but this was not confirmed.
+- The SMB-related services should be investigated to establish whether file sharing is enabled and which SMB version is running.
 
-**192.168.1.6 – Huawei device**
+**192.168.1.6 – Huawei Device**
 
-- 97 ports are filtered (no response), so a firewall is dropping packets.
-- It offers DNS and a web interface on both HTTP and HTTPS. It behaves like a second router, modem or access point.
+- TCP ports 53, 80 and 443 were identified as open.
+- Nmap classified 97 scanned ports as filtered.
+- Filtered ports indicate that Nmap could not determine w**9 – Arcadyan Device**
+- Ports 8008, 8009 and 8443 were identified as open.
+- These ports may be associated with media streaming or device-management services.
+- Nmap labelled port 8009 as AJP13 and port 3000 as PPP based on port associations.
+- The actual applications running on these ports were not confirmed.
+- Further service detection is recommended.
 
-**192.168.1.9 – Arcadyan device**
+**192.168.1.12 – Possible Windows Scanning Machine**
 
-- Ports 8008, 8009 and 8443 together are the usual pattern for a Google Cast device, such as a Chromecast, Android TV or ISP set-top box.
-- Nmap labelled 8009 as "ajp13" and 3000 as "ppp" from the port numbers only. These labels are probably not accurate. The service on port 3000 is unidentified.
+- TCP ports 135, 139 and 445 were identified as open.
+- These ports are commonly associated with Windows RPC and file-sharing services.
+- The host appears to be the scanning machine based on the scan context, but this should be confirmed.
 
-**192.168.1.12 – Windows PC**
+**192.168.1.2, 192.168.1.3 and 192.168.1.8 – Client Devices**
 
-- Ports 135, 139 and 445 are the standard Windows RPC and file sharing ports.
-- Nmap shows no MAC address for this host, which normally means it is the machine running the scan.
+- No open ports were identified within the 100 TCP ports scanned.
+- All 100 scanned ports were reported as closed.
+- The MAC addresses were randomised or locally administered, which can occur when devices use private Wi-Fi addresses.
+- The exact device types were not confirmed.
 
-**192.168.1.2, .3 and .8 – client devices**
+### 5.4 Network Topology Analysis
 
-- All 100 scanned ports are closed, so they offer no services on common ports.
-- Their MAC addresses are locally administered (randomised), which is typical of phones and tablets using a private Wi-Fi address.
+Zenmap was used to visualise the discovered network devices and their scan results.
 
-### 5.4 Topology Analysis
+The topology view helps present the discovered hosts and their apparent network relationships.
 
-- All hosts connect directly to localhost. The network is a single flat subnet with no segmentation.
-- Zenmap colours match the port counts: green nodes (.2, .3, .8) have no open ports, and yellow nodes (.1, .6, .9, .12) have three or four.
-- No red nodes (more than six open ports) were seen.
+However, a topology diagram alone does not prove that every device can communicate directly with every other device or that network segmentation is absent.
 
-![Zenmap topology](screenshots/10_topology.png)
+**Evidence:**
 
-### 5.5 Limitations
 
-- Only the top 100 TCP ports were scanned. Other TCP ports and all UDP ports were not checked.
-- No version detection (`-sV`) or OS detection (`-O`) was used. Service names are guesses based on port numbers, and device roles are inferred from MAC vendors and port patterns.
-- Suggested follow-up: `nmap -sV -O 192.168.1.1,6,9,12`
+
+### 5.5 Scan Limitations
+
+The network scan had the following limitations:
+
+- Only the 100 common TCP ports selected by Fast Scan were examined.
+- Other TCP ports were not assessed.
+- UDP scanning was not performed.
+- Service version detection was not performed.
+- Operating system detection was not performed.
+- Device roles were estimated from MAC vendor information and common port associations.
+- The scan did not establish whether discovered services were vulnerable.
+
+A follow-up assessment should validate the identified services and their versions before assigning confirmed vulnerability ratings.
 
 ---
 
 ## 6. Summary of Findings
 
-| ID | Finding | Evidence | Risk |
-|---|---|---|---|
-| F-01 | WordPress and plugin versions disclosed | WhatWeb | Low |
-| F-02 | Security headers missing (HSTS, CSP, X-Frame-Options, X-Content-Type-Options) | curl | Low |
-| F-03 | SPF soft fail (~all); no DMARC record observed | dnsrecon | Low |
-| F-04 | BIND version disclosed on name servers | dnsrecon | Low |
-| F-05 | DNSSEC not enabled | whois, dnsrecon | Low |
-| F-06 | WordPress REST API endpoint advertised | curl | Informational |
-| F-07 | Web and mail on one shared-hosting IP; origin IP exposed | nslookup, dnsrecon | Informational |
-| F-08 | Contact email publicly exposed | WhatWeb | Informational |
-| F-09 | Name server mismatch between registry and registrar records | whois | Informational |
-| F-10 | SMB (139, 445) exposed on gateway router 192.168.1.1 | Nmap | Medium (confirm SMB version) |
-| F-11 | Router admin interfaces over unencrypted HTTP (192.168.1.1 and 192.168.1.6) | Nmap | Low |
-| F-12 | Media device 192.168.1.9 exposes cast ports and an unidentified service on port 3000 | Nmap | Low |
-| F-13 | Windows RPC and SMB ports open on 192.168.1.12 | Nmap | Low |
-| F-14 | Flat network: every device can reach every other device | Zenmap topology | Low |
+| ID   | Finding                                                                  | Evidence            | Preliminary Assessment      |
+| ---- | ------------------------------------------------------------------------ | ------------------- | --------------------------- |
+| F-01 | WordPress and plugin version information disclosed                       | WhatWeb             | Low                         |
+| F-02 | Recommended HTTP security headers absent from captured response          | curl                | Low                         |
+| F-03 | SPF policy uses soft fail (`~all`)                                       | dnsrecon            | Low                         |
+| F-04 | BIND version information disclosed                                       | dnsrecon            | Informational               |
+| F-05 | DNSSEC reported unsigned                                                 | WHOIS / dnsrecon    | Requires verification       |
+| F-06 | WordPress REST API endpoint advertised                                   | curl                | Informational               |
+| F-07 | Website and mail hostnames resolve to the same IP                        | nslookup / dnsrecon | Informational               |
+| F-08 | Public contact email identified                                          | WhatWeb             | Informational               |
+| F-09 | Different name server entries appeared in registrar and registry records | WHOIS               | Requires verification       |
+| F-10 | TCP ports 139 and 445 open on gateway router                             | Nmap                | Requires service validation |
+| F-11 | HTTP services detected on 192.168.1.1 and 192.168.1.6                    | Nmap                | Requires validation         |
+| F-12 | Multiple ports open on Arcadyan device, including unidentified port 3000 | Nmap                | Requires validation         |
+| F-13 | Windows RPC and SMB-associated ports open on 192.168.1.12                | Nmap                | Requires validation         |
+| F-14 | Seven responsive devices identified within the scanned subnet            | Nmap                | Informational               |
 
-**Positive observations:** ModSecurity WAF is active, HTTP redirects to HTTPS, the cookie uses `Secure` and `HttpOnly`, domain lock statuses are enabled, the Apache version is hidden, 192.168.1.6 filters unused ports, and three client devices expose no services.
+### Positive Security Observations
+
+- HTTPS access was successful.
+- HTTP redirected to HTTPS.
+- The website used a Secure and HttpOnly cookie.
+- ModSecurity WAF was detected.
+- Domain protection statuses were enabled.
+- The Apache version was not disclosed in the captured response.
+- Three discovered client devices had no open ports within the scanned TCP port range.
 
 ---
 
 ## 7. Recommendations
 
-**Website (networkwalks.com)**
+### 7.1 Website Security Recommendations
 
-1. **Hide version information.** Remove the WordPress generator meta tag and plugin version strings. Keep the core, plugins and themes updated.
-2. **Add security headers.** Configure `Strict-Transport-Security`, `Content-Security-Policy`, `X-Frame-Options` (or `frame-ancestors`), `X-Content-Type-Options: nosniff`, and `SameSite` on cookies.
-3. **Strengthen email authentication.** Move SPF to `-all` once legitimate senders are confirmed. Publish a DMARC record and enable DKIM.
-4. **Enable DNSSEC** if the hosting provider supports it.
-5. **Restrict the REST API.** Block unauthenticated access to user endpoints such as `/wp-json/wp/v2/users`.
-6. **Ask the hosting provider** to suppress the BIND version banner, or consider a managed DNS/CDN service that also hides the origin IP.
-7. **Clean up the registrar name server records** so they match the registry delegation.
+1. **Keep software updated:** Regularly update WordPress, plugins and themes. Verify installed versions and check relevant security advisories.
 
-**Internal network (192.168.1.0/24)**
+2. **Improve HTTP security headers:** Review the configuration of HSTS, Content-Security-Policy, X-Frame-Options or CSP frame-ancestors, and X-Content-Type-Options.
 
-8. **Disable SMB on the router** if file sharing is not needed. If it is needed, require a password and disable SMBv1.
-9. **Secure router administration.** Change default admin passwords, update firmware, and use HTTPS for the admin page where available.
-10. **Identify the service on port 3000** of 192.168.1.9 and disable it if it is not required.
-11. **Restrict Windows file sharing.** Set the network profile to Public on untrusted networks, or limit ports 135, 139 and 445 with Windows Firewall.
-12. **Segment the network.** Put TV, IoT and guest devices on a separate guest network or VLAN.
-13. **Run a deeper scan** with version and OS detection to confirm the device roles and service versions.
+3. **Review cookie security:** Consider setting an appropriate SameSite attribute on cookies.
+
+4. **Strengthen email authentication:** Review SPF configuration, confirm all legitimate sending services before changing the policy to `-all`, and configure DKIM and DMARC.
+
+5. **Review DNSSEC:** Confirm DNSSEC support and enable it where appropriate.
+
+6. **Review DNS information disclosure:** Ask the hosting provider whether unnecessary version banners can be suppressed.
+
+7. **Review WordPress REST API exposure:** Ensure that user information and other sensitive resources are not accessible to unauthorised users.
+
+8. **Verify DNS configuration:** Confirm that registrar and registry name server information is consistent with the intended DNS delegation.
+
+### 7.2 Internal Network Security Recommendations
+
+9. **Review SMB services:** Identify why ports 139 and 445 are open on the gateway. Disable unnecessary file-sharing services and avoid SMBv1.
+
+10. **Secure router management:** Use strong administrator passwords, update firmware and use HTTPS for management where supported.
+
+11. **Investigate port 3000:** Identify the application running on 192.168.1.9 and determine whether it is required.
+
+12. **Protect Windows file sharing:** Apply appropriate Windows Firewall rules and restrict file-sharing access to trusted devices.
+
+13. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
+
+14. **Perform further service enumeration:** Use authorised service and version detection to identify the applications behind the discovered ports.
 
 ---
 
-## 8. Conclusion
+## 8. Limitations
 
-The footprinting phase built a clear profile of networkwalks.com from public sources: registrar, hosting provider, IP address, DNS records, mail setup, web technologies and WAF. The site has reasonable baseline protection, but it leaks version details and lacks several hardening measures.
+This assessment was limited to footprinting and basic network scanning.
 
-The scanning phase found seven live hosts on 192.168.1.0/24, four of them with open ports. The main concern is SMB file sharing on the gateway router. These results are the input for the next phase, enumeration and vulnerability analysis.
+The following activities were not performed:
+
+- Exploitation or proof-of-concept testing.
+- Vulnerability scanning and confirmation.
+- Password auditing or brute-force testing.
+- UDP port scanning.
+- Full TCP port scanning.
+- Detailed operating system fingerprinting.
+- Authenticated configuration reviews.
+- Network traffic interception.
+- Testing of lateral movement between discovered devices.
+
+The findings represent observations from the tools and commands used during the assessment. They should not be interpreted as proof that a particular system is vulnerable or secure.
+
+---
+
+## 9. Conclusion
+
+This project provided practical experience in two important penetration-testing activities: footprinting and network scanning.
+
+During the footprinting phase, I used WHOIS, WhatWeb, nslookup, curl, wafw00f and dnsrecon to gather information about the target domain, identify website technologies, examine DNS records, inspect HTTP response headers and detect a Web Application Firewall.
+
+During the network scanning phase, I used Zenmap and Nmap to discover active devices, identify open ports and visualise the local network.
+
+The assessment identified several areas that require further investigation, particularly the SMB-associated ports on the gateway device, the HTTP services on network devices and the security configuration of the public website.
+
+This project strengthened my practical understanding of reconnaissance, network discovery, port scanning, information gathering and security assessment.
+
+The results provide a foundation for further learning in service enumeration, vulnerability assessment and defensive security monitoring.
 
 ---
 
 ## Author
 
-**Kelechi Happiness Uzoma** – Cybersecurity student, Networkwalks Academy (Batch B084C)
+**Kelechi Happiness Uzoma**
+
+Cybersecurity Student | Aspiring Cybersecurity Analyst
+
+Networkwalks Academy – Batch B084C
