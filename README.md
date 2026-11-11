@@ -100,7 +100,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 - Registrant contact details are hidden behind GoDaddy's contact form, which limits material for social engineering.
 - The registrar record lists two extra GoDaddy name servers that the registry does not. This looks like a stale entry.
 
-![WHOIS output](screenshots/01_whois.png)
+![WHOIS output](1_whois.png)
 
 ### 4.2 Web Technology Fingerprinting (WhatWeb)
 
@@ -126,7 +126,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 - WhatWeb also reported "Bootstrap 7.1.4". This is most likely a false positive taken from the WordPress version string, because the number is identical.
 - The `x-endurance-cache-level` and `x-nginx-cache` headers show a caching layer typical of HostGator-family hosting.
 
-![WhatWeb output](screenshots/02_whatweb.png)
+![WhatWeb output](2_whatweb.png)
 
 ### 4.3 DNS Resolution (nslookup)
 
@@ -140,7 +140,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 
 **Analysis:** The domain resolves to a single IPv4 address with no load balancing or CDN in front of it. The origin server's real IP is therefore directly exposed.
 
-![nslookup output](screenshots/03_nslookup.png)
+![nslookup output](3_nslookup.png)
 
 ### 4.4 HTTP Header Analysis (curl)
 
@@ -164,7 +164,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 - **Missing from the response:** `Strict-Transport-Security`, `Content-Security-Policy`, `X-Frame-Options` and `X-Content-Type-Options`. The cookie also has no `SameSite` attribute.
 - The `link` header advertises the WordPress REST API (`/wp-json/`). This endpoint can sometimes be used to enumerate users. It was not tested in this phase.
 
-![curl header output](screenshots/04_headers.png)
+![curl header output](4_headers.png)
 
 ### 4.5 WAF Detection (wafw00f)
 
@@ -177,7 +177,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 
 **Analysis:** A WAF is active. This is a positive control. Later testing should expect filtering and blocking of malicious-looking requests.
 
-![wafw00f output](screenshots/05_wafw00f.png)
+![wafw00f output](5_wafw00f.png)
 
 ### 4.6 DNS Enumeration (dnsrecon)
 
@@ -205,7 +205,7 @@ Footprinting output was saved to `~/week2-pm1` using `tee`.
 
 **Tool note:** The first dnsrecon run failed. The tool was upgraded to 1.6.3 with python3-httpcore 1.0.9, and the scan then completed.
 
-![dnsrecon output](screenshots/06_dnsrecon.png)
+![dnsrecon output](6_dnsrecon_fixed.png)
 
 ---
 
