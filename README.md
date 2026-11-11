@@ -378,29 +378,21 @@ MAC addresses have been partially masked for privacy.
 - The HTTP service may provide a router management interface, but this was not confirmed.
 - The SMB-related services should be investigated to establish whether file sharing is enabled and which SMB version is running.
 
-**192.168.1.6 – Huawei Device**
+
+  **192.168.1.6 – Huawei Device**
 
 - TCP ports 53, 80 and 443 were identified as open.
 - Nmap classified 97 scanned ports as filtered.
-- Filtered ports indicate that Nmap could not determine w**9 – Arcadyan Device**
-- Ports 8008, 8009 and 8443 were identified as open.
+- Filtered ports indicate that Nmap could not determine whether the ports were open or closed, possibly because of firewall filtering.
+- Further investigation is required to identify the services running on these ports.
+
+**192.168.1.9 – Arcadyan Device**
+
+- Ports 3000, 8008, 8009 and 8443 were identified as open.
 - These ports may be associated with media streaming or device-management services.
-- Nmap labelled port 8009 as AJP13 and port 3000 as PPP based on port associations.
 - The actual applications running on these ports were not confirmed.
 - Further service detection is recommended.
 
-**192.168.1.12 – Possible Windows Scanning Machine**
-
-- TCP ports 135, 139 and 445 were identified as open.
-- These ports are commonly associated with Windows RPC and file-sharing services.
-- The host appears to be the scanning machine based on the scan context, but this should be confirmed.
-
-**192.168.1.2, 192.168.1.3 and 192.168.1.8 – Client Devices**
-
-- No open ports were identified within the 100 TCP ports scanned.
-- All 100 scanned ports were reported as closed.
-- The MAC addresses were randomised or locally administered, which can occur when devices use private Wi-Fi addresses.
-- The exact device types were not confirmed.
 
 ### 5.4 Network Topology Analysis
 
@@ -412,7 +404,8 @@ However, a topology diagram alone does not prove that every device can communica
 
 **Evidence:**
 
-.pdf
+<img width="960" height="504" alt="Screenshot 2026-11-11 160704" src="https://github.com/user-attachments/assets/6e7051ed-6758-4381-af2c-ed57917fe12e" />
+
 
 ### 5.5 Scan Limitations
 
