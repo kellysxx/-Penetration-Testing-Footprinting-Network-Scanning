@@ -357,7 +357,7 @@ MAC addresses have been partially masked for privacy.
 | 192.168.1.6  | Huawei         | 53, 80, 443            | 97 filtered        | Router, modem or access point     |
 | 192.168.1.8  | Randomised MAC | None                   | 100 closed         | Client device                     |
 | 192.168.1.9  | Arcadyan       | 3000, 8008, 8009, 8443 | 96 closed          | Possible media or network device  |
-| 192.168.1.12 | Not shown      | 135, 139, 445          | 97 closed          | Possible Windows scanning machine |
+| 192.168.1.12 | Windows computer | 135, 139, 445 | 97 closed | Windows scanning machine |
 
 **Important:** Port numbers and Nmap service labels provide initial clues, not definitive identification of the software running on a device.
 
@@ -397,13 +397,13 @@ The Nmap scan identified four devices with open TCP ports within the scanned por
 - The exact applications running on these ports were not confirmed by the Fast Scan.
 - Further service and version detection is recommended to identify the services and determine whether they are required.
 
-**192.168.1.12 – Possible Windows Scanning Machine**
+**192.168.1.12 – Confirmed Windows Scanning Machine**
 
+- Confirmed as the Windows computer used for the network scan, based on its Wi-Fi IPv4 configuration.
 - TCP ports 135, 139 and 445 were identified as open.
 - Port 135 is commonly associated with Microsoft RPC.
 - Ports 139 and 445 are commonly associated with NetBIOS and SMB.
-- The device may be a Windows computer, but its operating system and exact role were not confirmed.
-- Further investigation should establish whether these services are necessary and appropriately restricted.
+- Further investigation is recommended to determine whether these services are necessary and appropriately restricted.
 
 **Other Discovered Hosts**
 
