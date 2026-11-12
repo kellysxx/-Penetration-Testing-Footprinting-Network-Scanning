@@ -76,7 +76,7 @@ No directly exploitable vulnerability was confirmed during this assessment. Risk
 | Assessment activities   | Footprinting, DNS enumeration, host discovery and TCP port scanning           |
 | Out-of-scope activities | Exploitation, brute forcing, denial-of-service testing and social engineering |
 | Authorisation           | Conducted within the Networkwalks cybersecurity training lab                  |
-| Scanner IP              | 192.168.1.12 (inferred from scan results; confirmation recommended)           |
+| Scanner IP | 192.168.1.12 (confirmed Windows scanning computer) |           
 
 The assessment was limited to information gathering and scanning activities.
 
@@ -298,8 +298,8 @@ dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
 
 **Analysis:**
 
-- The DNS enumeration identified two name servers.
-- The collected results disclosed a BIND version of 9.16.23-RH.
+- The DNS enumeration identified two name servers
+-  DNSRecon identified BIND version 9.16.23-RH on both discovered name server IP addresses (192.232.216.131 and 50.87.144.87).
 - The website and mail hostnames resolved to the same IP address in the collected results. This does not prove that they share the same physical server.
 - The SPF record ends with `~all`, which represents a soft-fail policy.
 - No DMARC record was shown in the collected output. A dedicated DMARC lookup is required to confirm its presence or absence.
@@ -454,7 +454,7 @@ A follow-up assessment should validate the identified services and their version
 | F-08 | Public contact email identified                                          | WhatWeb             | Informational               |
 | F-09 | Different name server entries appeared in registrar and registry records | WHOIS               | Requires verification       |
 | F-10 | TCP ports 53, 80, 139 and 445 open on confirmed gateway device                            | Nmap                | Requires service validation |
-| F-11 | HTTP services detected on 192.168.1.1 and 192.168.1.6                    | Nmap                | Requires validation         |
+| F-11 | TCP port 80 open on 192.168.1.1 and 192.168.1.6; service not confirmed | Nmap | Requires validation |
 | F-12 | Multiple open TCP ports (3000, 8008, 8009 and 8443) on Arcadyan-associated device; services unconfirmed | Nmap                | Requires validation         |
 | F-13 | TCP ports 135, 139 and 445 open on confirmed Windows scanning computer (`192.168.1.12`)                | Nmap                | Requires validation         |
 | F-14 | Seven responsive devices identified within the scanned subnet            | Nmap                | Informational               |
