@@ -303,7 +303,7 @@ dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
 - The website and mail hostnames resolved to the same IP address in the collected results. This does not prove that they share the same physical server.
 - The SPF record ends with `~all`, which represents a soft-fail policy.
 - No DMARC record was shown in the collected output. A dedicated DMARC lookup is required to confirm its presence or absence.
-- DNSSEC was reported as unsigned in the collected WHOIS information. This should be verified with an authoritative DNSSEC check.
+ - WHOIS reported the domain as unsigned for DNSSEC. DNSRecon returned no answer to its DNSSEC query. An authoritative DNSSEC check is recommended to confirm the domain's DNSSEC status.
 
 **Tool Note:**
 
@@ -448,7 +448,7 @@ A follow-up assessment should validate the identified services and their version
 | F-02 | Recommended HTTP security headers absent from captured response          | curl                | Low                         |
 | F-03 | SPF policy uses soft fail (`~all`)                                       | dnsrecon            | Low                         |
 | F-04 | BIND version information disclosed                                       | dnsrecon            | Informational               |
-| F-05 | DNSSEC reported unsigned                                                 | WHOIS / dnsrecon    | Requires verification       |
+| F-05 | WHOIS reported DNSSEC as unsigned; DNSRecon returned no answer to its DNSSEC query | WHOIS / dnsrecon | Requires verification |
 | F-06 | WordPress REST API endpoint advertised                                   | curl                | Informational               |
 | F-07 | Website and mail hostnames resolve to the same IP                        | nslookup / dnsrecon | Informational               |
 | F-08 | Public contact email identified                                          | WhatWeb             | Informational               |
