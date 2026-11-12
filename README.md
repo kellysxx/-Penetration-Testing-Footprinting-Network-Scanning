@@ -494,8 +494,7 @@ A follow-up assessment should validate the identified services and their version
 
 9. **Review SMB services:** Investigate why ports 139 and 445 are open on the gateway. Identify the services using these ports, disable unnecessary file-sharing services and verify that SMBv1 is not enabled.
 10. **Review gateway security:** Verify that gateway administration is restricted to trusted devices, use strong administrator credentials, keep firmware updated and use HTTPS for management where supported.
-11. **Secure router management:** Use strong administrator passwords, update firmware and use HTTPS for management where supported.
-
+11. **Review remote administration:** Disable remote management from the internet unless it is required, and restrict access to trusted administrators.
 12. **Investigate port 3000:** Identify the application running on 192.168.1.9 and determine whether it is required.
 
 13. **Review network segmentation:** Consider separating guest devices and IoT equipment from trusted computers using supported guest-network or VLAN controls.
