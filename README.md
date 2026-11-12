@@ -310,7 +310,8 @@ dnsrecon -d networkwalks.com | tee 6_dnsrecon_fixed.txt
 The initial dnsrecon execution encountered an error. The tool was upgraded to version 1.6.3, after which the enumeration completed successfully.
 
 **Evidence:**
-<img width="1920" height="891" alt="6_dnsrecon_fixed" src="https://github.com/user-attachments/assets/c583cde3-5709-400e-935a-bee7b2bbcb30" />
+<img width="1920" height="891" alt="image" src="https://github.com/user-attachments/assets/89d75e5a-be18-4025-a35d-0e14750996c3" />
+
 
 
 
