@@ -468,7 +468,6 @@ A follow-up assessment should validate the identified services and their version
 - Domain protection statuses were enabled.
 - The Apache version was not disclosed in the captured response.
 - Three discovered client devices (`192.168.1.2`, `192.168.1.3` and `192.168.1.8`) had no open ports within the 100 common TCP ports scanned.
-
 ---
 
 ## 7. Recommendations
